@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Goal Calculator</title>
+    <style>
+        /* General Reset */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            width: 100%;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #000000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0 2px 5px rgba(82, 82, 82, 0.2);
+            z-index: 1000;
+            padding: 10px 20px;
+            height: 60px;
+        }
+
+        .logo-img {
+            margin-top: 2px;
+            width: 60px;
+            height: 60px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin: 0;
+        }
+
+        .nav-links li a {
+            margin-right: 20px;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .nav-links li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hamburger Menu Styling */
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                padding: 0;
+                background-color: #e0e0e0;
+                position: absolute;
+                top: 60px;
+                left: 0;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links li a {
+                display: block;
+                padding: 10px;
+                text-align: left;
+            }
+        }
+
+        /* Intro Section Styling */
+        .intro-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0px 20px;
+            margin-bottom: 0px !important;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            background: #fff;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Calculator Section Styling */
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgb(219, 219, 219);
+        }
+
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            margin-top: 10px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 10px rgb(141, 141, 141);
+        }
+
+        /* Headings */
+        h1 {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        p {
+            color: #000000;
+            /* font-size: 14px; */
+            margin-bottom: 0px;
+        }
+
+        /* Form Field Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .input-group input {
+            width: 100%;
+            max-width: 100px;
+        }
+
+        /* Range Slider Styling */
+        input[type="range"] {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Result Box Styling */
+        .result {
+            background-color: #f7f7f7;
+            border-radius: 6px;
+            padding: 15px;
+            /* margin-top: 20px; */
+            font-size: 18px;
+            color: #000000;
+            /* font-weight: bold; */
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #001aff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background-color: #007bff;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            border: 4px solid #ddd;
+            border-top: 4px solid #001aff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .intro-section {
+                /* margin-top: 80px; */
+                text-align: center;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .buttons button {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <img src="images.jfif" alt="Logo" class="logo-img">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">&#9776;</div> <!-- Hamburger icon -->
+        </nav>
+    </header>
+
+    <div class="intro-section">
+        <h1 style="margin-top: 70px;">Savings Goal Financial Takaful Calculator</h1>
+        <p>
+            Set yourself up for success by planning your savings with clear goals. Whether it’s buying a dream home,
+            funding education, or traveling the world, a Takaful savings plan offers financial protection while helping
+            you save. Use our calculator to estimate the amount needed to achieve your goals and the time required to
+            save it. For guidance, connect with a Great Eastern Takaful Advisor to find the plan that best suits your
+            needs and budget.
+        </p>
+
+    </div>
+
+    <div class="container">
+        <h1>Savings Goal Financial Calculator</h1>
+        <p>Calculate how much you need to save each month to reach your goal.</p>
+
+        <!-- Savings Goal Input -->
+        <div style="margin-left: 2px;" class="form-group">
+            <label for="goalAmount" style="margin-top: 20px;">How much do you want to save?</label>
+            <input type="number" id="goalAmount" placeholder="Enter amount (e.g., 100000)" />
+        </div>
+
+        <!-- Inflation Rate and Years Input -->
+        <div style="margin-left: 2px;" class="form-group">
+            <div class="input-group">
+                <label>Inflation Rate (%)</label>
+                <input type="number" id="inflationRate" value="3" min="0" max="10" />
+            </div>
+
+            <label for="years">How many years are you planning to save for?</label>
+            <input type="range" id="years" min="1" max="42" value="10" oninput="displayYearValue()" />
+            <div style="font-weight: bold;" id="yearDisplay">10 years</div>
+        </div>
+
+        <!-- Future Value Result -->
+        <div class="result" id="futureValueResult"></div>
+
+        <!-- Monthly Savings Result and Loader -->
+        <div class="loader" id="loader"></div>
+        <div class="result" id="result"></div>
+        <br>
+        <!-- Buttons -->
+        <div class="buttons">
+            <button onclick="calculate()">Calculate</button>
+            <button onclick="resetCalculation()">Reset Calculation</button>
+        </div>
+    </div>
+
+    <script>
+
+        function toggleMenu() {
+            document.querySelector('.nav-links').classList.toggle('show');
+        }
+
+        function displayYearValue() {
+            const years = document.getElementById('years').value;
+            document.getElementById('yearDisplay').textContent = `${years} years`;
+        }
+
+        function calculate() {
+            const goalAmount = parseFloat(document.getElementById('goalAmount').value);
+            const inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
+            const years = parseInt(document.getElementById('years').value);
+            const investmentRate = 0.05; // Fixed investment rate at 5%
+
+            if (isNaN(goalAmount) || isNaN(inflationRate) || isNaN(years)) {
+                alert('Please fill in all fields with valid values.');
+                return;
+            }
+
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('result').textContent = '';
+            document.getElementById('futureValueResult').textContent = '';
+
+            setTimeout(() => {
+                const futureValue = goalAmount * Math.pow(1 + inflationRate, years);
+                const monthlySavings = (futureValue * investmentRate / 12) / (Math.pow(1 + investmentRate / 12, years * 12) - 1);
+
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('futureValueResult').textContent = `The future value of your desired saving in ${years} years is Rs:${futureValue.toFixed(2)}`;
+                document.getElementById('result').textContent = `You need to save Rs:${monthlySavings.toFixed(2)} monthly to reach your goal.`;
+            }, 1000);
+        }
+
+        function resetCalculation() {
+            document.getElementById('goalAmount').value = '';
+            document.getElementById('inflationRate').value = 3;
+            document.getElementById('years').value = 10;
+            document.getElementById('yearDisplay').textContent = '10 years';
+            document.getElementById('futureValueResult').textContent = '';
+            document.getElementById('result').textContent = '';
+        }
+    </script>
+
+</body>
+
+</html>
